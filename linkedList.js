@@ -49,12 +49,12 @@ export default function linkedList() {
   const headNode = () => {
     // Returns first item in the list
     console.log("Returning first item in list.");
-    return head;
+    return head.value;
   };
   const tailNode = () => {
     // Returns last item in the list
     console.log("Returning last item in list.");
-    return tail;
+    return tail.value;
   };
   const size = () => {
     // Returns list item count
@@ -77,9 +77,20 @@ export default function linkedList() {
   };
   const pop = () => {
     console.log("Removing last element in list.");
+    if (!head) {
+      console.log("No items to remove.");
+      return;
+    }
     let cursor = head;
     while (cursor.nextNode.nextNode) {
+      // Traverse list till last node is nextNode
       cursor = cursor.nextNode;
+    }
+    if (!cursor.nextNode) {
+      //
+      head = null;
+      tail = null;
+      return;
     }
     cursor.nextNode = null;
     tail = cursor;
