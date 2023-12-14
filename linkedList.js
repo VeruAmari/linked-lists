@@ -1,4 +1,4 @@
-const linkedList = () => {
+export default function linkedList() {
   // Keep track of head and tail of list
   let head = null;
   let tail = null;
@@ -96,19 +96,92 @@ const linkedList = () => {
       return false;
     }
   };
-  return { append, prepend, headNode, tailNode, size, at, pop, contains };
-};
+  const find = (value) => {
+    console.log(`Finding idex of ${value} in list.`);
+    let cursor = head;
+    let index = 0;
+    while (cursor) {
+      if (cursor.value === value) {
+        console.log(`${value} found at index ${index}`);
+        return index;
+      }
+      index += 1;
+      cursor = cursor.nextNode;
+    }
+    console.log(`${value} not found in list.`);
+    return null;
+  };
+  const toString = () => {
+    let cursor = head;
+    let string = "";
+    while (cursor) {
+      string += `( ${cursor.value} ) -> `;
+      cursor = cursor.nextNode;
+    }
+    string += cursor;
+    return string;
+  };
+  const insertAt = (value, index) => {
+    console.log(`Inserting ${value} at index ${index}`);
+    let i = 0;
+    if (index === 0) {
+      prepend(value);
+    } else {
+      let cursor = head;
+      // Traverse list to given index
 
-const array = [1, 2, 3, 4, "cat"];
-const list = linkedList();
-array.forEach((element) => {
-  list.append(element);
-});
-list.append(123);
-list.prepend("abc");
-console.log(list.headNode());
-console.log(list.size());
-console.log(list.tailNode());
-list.pop();
-console.log(list.tailNode());
-console.log(list.size());
+      for (; i < index - 1; i++) {
+        // If given index is bigger than items in list or list is empty, just run append and exit
+        if (!cursor || !cursor.nextNode) {
+          append(value);
+          return;
+        }
+        cursor = cursor.nextNode;
+      }
+      i++;
+      const newNode = node();
+      newNode.value = value;
+      newNode.nextNode = cursor.nextNode;
+      cursor.nextNode = newNode;
+    }
+    console.log(`Inserted ${value} at index ${i}.`);
+  };
+  const removeAt = (index) => {
+    let cursor = head;
+    if (!cursor || !cursor.nextNode) {
+      console.log(`No node found at index ${index}.`);
+      return;
+    }
+    if (index === 0) {
+      console.log(`Removing ${head.value} node.`);
+      head = head.nextNode;
+    } else {
+      // Traverse list to given index
+      for (let i = 0; i < index - 1; i++) {
+        if (!cursor.nextNode.nextNode) {
+          break;
+        }
+        cursor = cursor.nextNode;
+      }
+      console.log(`Removing node ${cursor.nextNode.value}`);
+      if (cursor.nextNode === tail) {
+        tail = cursor;
+      }
+      cursor.nextNode = cursor.nextNode.nextNode;
+    }
+  };
+  return {
+    append,
+    prepend,
+    headNode,
+    tailNode,
+    size,
+    at,
+    pop,
+    contains,
+    find,
+    toString,
+    insertAt,
+    removeAt,
+  };
+}
